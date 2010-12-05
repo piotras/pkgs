@@ -32,12 +32,11 @@ Summary:          Library for unified database access/
 Group:            System Environment/Libraries
 License:          LGPLv2+
 URL:              http://www.gnome-db.org/
-Source:           http://ftp.gnome.org/pub/GNOME/sources/%{name}/4.0/%{name}-%{version}.tar.bz2
+Source:           http://ftp.gnome.org/pub/GNOME/sources/%{name}/4.0/%{name}-%{version}.tar.gz
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:    pkgconfig >= 0.8
 BuildRequires:    glib2-devel >= 2.16
 BuildRequires:	  gtk2-devel >= 2.20.0
-BuildRequires:	  gtksourceview2-devel >= 2.10.0
 BuildRequires: 	  graphviz-devel >= 2.26.0
 BuildRequires:    libxslt-devel >= 1.0.9
 BuildRequires:    sqlite-devel >= 3.6.0
