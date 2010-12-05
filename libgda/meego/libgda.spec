@@ -5,9 +5,9 @@
 %define           SYBASE   0
 %define           LDAP     0
 %define           MDB      0
-%define           MYSQL    1
+%define           MYSQL    0
 %define           ODBC     0
-%define           POSTGRES 1
+%define           POSTGRES 0
 %define           FREETDS  0
 %define           XBASE    0
 %define           JAVA     0
@@ -37,11 +37,8 @@ BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:    pkgconfig >= 0.8
 BuildRequires:    glib2-devel >= 2.16
 BuildRequires:	  gtk2-devel >= 2.20.0
-BuildRequires:	  unique-devel >= 1.1.6
 BuildRequires:	  gtksourceview2-devel >= 2.10.0
-BuildRequires:	  goocanvas-devel >= 0.15
 BuildRequires: 	  graphviz-devel >= 2.26.0
-BuildRequires:	  iso-codes >= 3.15
 BuildRequires:    libxslt-devel >= 1.0.9
 BuildRequires:    sqlite-devel >= 3.6.0
 BuildRequires:    gamin-devel >= 0.1.8
@@ -51,7 +48,6 @@ BuildRequires:    libxml2-devel readline-devel db4-devel json-glib-devel
 BuildRequires:    gtk-doc scrollkeeper intltool gettext flex bison perl(XML::Parser)
 BuildRequires:    gnome-vfs2-devel >= 2.20
 BuildRequires:    libsoup-devel
-BuildRequires:	  java-1.6.0-openjdk >= 1.6.0.0
 BuildRequires:    gnome-doc-utils
 # note we do not provide these, they no longer exist
 Obsoletes:        %{name}-sharp < %{epoch}:%{version}-%{release}
