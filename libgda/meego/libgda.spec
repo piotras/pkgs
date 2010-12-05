@@ -11,6 +11,7 @@
 %define           FREETDS  0
 %define           XBASE    0
 %define           JAVA     0
+%define		  CRYPTO   0
 
 %{?_with_db2:%define IBMDB2     1}
 %{?_with_oracle:%define ORACLE  1}
@@ -464,6 +465,12 @@ CONFIG="$CONFIG --without-xbase"
 CONFIG="$CONFIG --with-java"
 %else
 CONFIG="$CONFIG --without-java"
+%endif
+
+%if %{CRYPTO}
+CONFIG="$CONFIG --enable-crypto"
+%else
+CONFIG="$CONFIG --disable-crypto"
 %endif
 
 %configure $CONFIG
