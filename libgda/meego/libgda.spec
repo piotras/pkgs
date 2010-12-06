@@ -474,12 +474,9 @@ CONFIG="$CONFIG --disable-crypto"
 %endif
 
 %configure $CONFIG
-# Don't use rpath!
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 # workaround to fix linking failure for GI
 export LD_LIBRARY_PATH=`pwd`/libgda/.libs:`pwd`/libgda-report/.libs:`pwd`/libgda-ui/.libs
-make %{?_smp_mflags}
+make
 
 
 %install
