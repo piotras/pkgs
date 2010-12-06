@@ -398,8 +398,8 @@ autoreconf -fi
 
 
 %build
-CONFIG="--disable-static --disable-dependency-tracking --enable-system-sqlite --with-libsoup \
-                         --enable-gtk-doc"
+#CONFIG="--disable-static --disable-dependency-tracking --enable-system-sqlite --with-libsoup --enable-gtk-doc"
+CONFIG="--disable-static --disable-dependency-tracking --enable-system-sqlite --with-libsoup --with-ui=no"
 
 %if %{FREETDS}
 CONFIG="$CONFIG --with-tds"
