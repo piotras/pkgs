@@ -12,6 +12,7 @@
 %define           XBASE    0
 %define           JAVA     0
 %define		  CRYPTO   0
+%define		  GDAUI	   0
 
 %{?_with_db2:%define IBMDB2     1}
 %{?_with_oracle:%define ORACLE  1}
@@ -110,11 +111,11 @@ Requires:         %{name} = %{epoch}:%{version}-%{release}
 This package contains the header files and libraries needed to write
 or compile programs that use libgda.
 
+%if %{GDAUI}
 %package ui
 Summary:          Libgda UI extensions
 Group:            Development/Libraries
 Requires:         %{name} = %{epoch}:%{version}-%{release}
-
 %description ui
 libgda-ui extends libgda providing graphical widgets (Gtk+).
 
@@ -124,10 +125,10 @@ Group:            Development/Libraries
 Requires:         %{name}-ui = %{epoch}:%{version}-%{release}
 Requires:         %{name}-devel = %{epoch}:%{version}-%{release}
 Requires:	  gtk2-devel >= 2.20.0
-
 %description ui-devel
 This package contains the header files and libraries needed to write
 or compile programs that use libgda-ui.
+%endif
 
 %package tools
 Summary:	  Graphical tools for libgda
@@ -399,7 +400,7 @@ autoreconf -fi
 
 %build
 #CONFIG="--disable-static --disable-dependency-tracking --enable-system-sqlite --with-libsoup --enable-gtk-doc"
-CONFIG="--disable-static --disable-dependency-tracking --enable-system-sqlite --with-libsoup --with-ui=no"
+CONFIG="--disable-static --disable-dependency-tracking --enable-system-sqlite --with-libsoup"
 
 %if %{FREETDS}
 CONFIG="$CONFIG --with-tds"
@@ -473,6 +474,12 @@ CONFIG="$CONFIG --enable-crypto"
 CONFIG="$CONFIG --disable-crypto"
 %endif
 
+%if %{GDAUI}
+CONFIG="$CONFIG --with-ui=yes"
+%else
+CONFIG="$CONFIG --with-ui=no"
+%endif
+
 %configure $CONFIG
 # workaround to fix linking failure for GI
 export LD_LIBRARY_PATH=`pwd`/libgda/.libs:`pwd`/libgda-report/.libs:`pwd`/libgda-ui/.libs
@@ -518,8 +525,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/gda-list-server-op
 %{_bindir}/gda-sql
 %{_datadir}/libgda-4.0/dtd/libgda-*.dtd
-%{_datadir}/%{name}-4.0/language-specs
-%{_datadir}/%{name}-4.0/import_encodings.xml
+#%{_datadir}/%{name}-4.0/language-specs
+#%{_datadir}/%{name}-4.0/import_encodings.xml
 %{_datadir}/%{name}-4.0/information_schema.xml
 %{_libdir}/%{name}-4.0.so.*
 %{_libdir}/%{name}-report-4.0.so.*
@@ -546,8 +553,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/libgda-bdb-4.0.pc
 %{_libdir}/pkgconfig/libgda-report-4.0.pc
 %{_libdir}/pkgconfig/libgda-xslt-4.0.pc
-#%{_datadir}/gir-1.0/Gda-4.0.gir
+%{_datadir}/gir-1.0/Gda-4.0.gir
+%{_libdir}/girepository-1.0/Gda-4.0.typelib
 
+%if %{GDAUI}
 %files ui
 %defattr(-,root,root,-)
 %{_libdir}/%{name}-ui-4.0.so.*
@@ -584,6 +593,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/icons/hicolor/*/apps/gda-control-center.png
 %{_datadir}/gnome/help/gda-browser/*
 %{_datadir}/pixmaps/gda-browser-4.0.png
+%endif
 
 %files sqlite
 %defattr(-,root,root,-)
@@ -594,6 +604,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_libdir}/pkgconfig/libgda-sqlite-4.0.pc
 
+%if %{CRYPTO}
 %files sqlcipher
 %defattr(-,root,root,-)
 %{_libdir}/%{name}-4.0/providers/%{name}-sqlcipher.so
@@ -602,6 +613,7 @@ rm -rf $RPM_BUILD_ROOT
 %files sqlcipher-devel
 %defattr(-,root,root,-)
 %{_libdir}/pkgconfig/libgda-sqlcipher-4.0.pc
+%endif
 
 %files web
 %defattr(-,root,root,-)
