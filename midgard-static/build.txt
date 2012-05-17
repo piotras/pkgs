@@ -55,17 +55,27 @@ ar rcs midgardstatic.a libgda5-5.0.3/libgda/sqlite/.libs/*.o
 ar rcs midgardstatic.a midgard-core/*.o
 ar rcs midgardstatic.a midgard-php5/.libs/*.o
 
-cd midgard-php5
-cp ../midgardstatic.a ./
 
-libtool --mode=compile --tag=CC gcc  midgardstatic.a -lz -ldl -lm -o midgard2.o
+####################
+PHP extension note : 
 
-# Edit Makefile
-add to MIDGARD2_SHARED_LIBADD:
--lgda-5.0 -ldbus-1 -ldbus-glib-1 -lgio-2.0 
+Makefile:
 
-add to shared_objects_midgard2:
-midgardstatic.a 
+Add archives (static objects) with proper directories:
+
+STATIC_GLIB = ../glib2.0-2.32.1/gthread/.libs/libgthread-2.0.a ../glib2.0-2.32.1/gmodule/.libs/libgmodule-2.0.a ../glib2.0-2.32.1/gio/.libs/libgio-2.0.a ../glib2.0-2.32.1/gobject/.libs/libgobject-2.0.a ../glib2.0-2.32.1/glib/.libs/libglib-2.0.a
+STATIC_GDA = ../libgda5-5.0.3/libgda/.libs/libgda-5.0.a
+STATIC_XML = ../libxml2-2.7.8.dfsg/.libs/libxml2.a
+STATIC_MIDGARD = ../midgard-core/src/.libs/libmidgard2.a
+STATIC_LIBS = $(STATIC_MIDGARD) $(STATIC_GDA) $(STATIC_XML) $(STATIC_GLIB)
+
+Do not link dynamically, keep midgard libadd blank.
+
+MIDGARD2_SHARED_LIBADD =
+
+Add static objects to be built in extension:
+
+shared_objects_midgard2 = ... $(STATIC_LIBS)
 
 make
 
