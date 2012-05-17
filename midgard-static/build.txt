@@ -1,0 +1,71 @@
+
+apt-get source libglib2.0-0
+cd glib2.0-2.32.1/
+./configure --enable-static=yes 
+make
+
+cd ../
+
+apt-get source libxml2
+cd libxml2-2.7.8.dfsg/
+./configure 
+make
+
+cd ../
+
+apt-get source libgda-5.0-4
+cd libgda5-5.0.3/
+./configure --enable-static=yes --disable-gtk-doc-html --without-postgres --without-mysql --without-libsoup --without-bdb --without-oracle --without-ldap --without-firebird --without-mdb --without-java --without-gnome-keyring --without-ui --disable-crypto --enable-vala=no  --enable-ui=no --enable-libxslt=no  --enable-gda-ui=no 
+make
+
+cd ../
+
+apt-get source libdbus-glib-1-2
+cd dbus-glib-0.98/
+./configure 
+make
+
+git clone git@github.com:midgardproject/midgard-core.git
+cd midgard-core/
+git checkout ratatoskr
+./autogen.sh --with-dbus-support=no --with-libgda5=yes
+make
+
+cd ../
+
+git clone git@github.com:midgardproject/midgard-php5.git
+cd midgard-php5/
+phpize
+./configure
+make
+
+cd ../
+
+ar rcs midgardstatic.a glib2.0-2.32.1/glib/.libs/*.o
+ar rcs midgardstatic.a glib2.0-2.32.1/glib/libcharset/.libs/*.o
+ar rcs midgardstatic.a glib2.0-2.32.1/gobject/.libs/*.o
+ar rcs midgardstatic.a glib2.0-2.32.1/gthread/.libs/*.o
+ar rcs midgardstatic.a glib2.0-2.32.1/gio/.libs/*.o
+ar rcs midgardstatic.a glib2.0-2.32.1/gio/xdgmime/.libs/*.o
+ar rcs midgardstatic.a glib2.0-2.32.1/gmodule/.libs/*.o
+ar rcs midgardstatic.a libxml2-2.7.8.dfsg/*.o
+ar rcs midgardstatic.a libgda5-5.0.3/libgda/.libs/*.o
+ar rcs midgardstatic.a libgda5-5.0.3/libgda/thread-wrapper/.libs/*.o
+ar rcs midgardstatic.a libgda5-5.0.3/libgda/sqlite/.libs/*.o
+ar rcs midgardstatic.a midgard-core/*.o
+ar rcs midgardstatic.a midgard-php5/.libs/*.o
+
+cd midgard-php5
+cp ../midgardstatic.a ./
+
+libtool --mode=compile --tag=CC gcc  midgardstatic.a -lz -ldl -lm -o midgard2.o
+
+# Edit Makefile
+add to MIDGARD2_SHARED_LIBADD:
+-lgda-5.0 -ldbus-1 -ldbus-glib-1 -lgio-2.0 
+
+add to shared_objects_midgard2:
+midgardstatic.a 
+
+make
+
