@@ -79,3 +79,11 @@ shared_objects_midgard2 = ... $(STATIC_LIBS)
 
 make
 
+Configure runtime directories:
+
+export GDA_TOP_BUILD_DIR="/usr/lib/libgda-5.0"
+mkdir -p /tmp/gda/libgda
+cp -r /usr/share/libgda-5.0/* /tmp/gda/libgda/
+cp /tmp/gda/libgda/dtd/* /tmp/gda/libgda/
+export GDA_TOP_SRC_DIR="/tmp/gda"
+export MIDGARD_ENV_GLOBAL_SHAREDIR="/usr/share/midgard2/"
